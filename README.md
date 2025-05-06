@@ -21,3 +21,11 @@
 ~ gcc -Wall -o iregex.out iregex.c
 ~ gcc -Wall -o iregex.out iregex.c -fopenmp
 ```
+
+- [x] For Khipu
+
+```
+~ module load python3
+~ module swap openmpi4 mpich/3.4.3-ofi
+~ module load py3-mpi4py
+```
