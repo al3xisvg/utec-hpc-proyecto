@@ -91,15 +91,21 @@ int main(int argc, char *argv[]) {
         std::cout << "\n💰 Costo total: " << best_cost << "\n";
 
         // Ahora guarda CSV
-        std::string output_file = "output.csv";
-        bool exists = file_exists(output_file);
+        // std::string output_file = "output.csv";
+        /*bool exists = file_exists(output_file);
 
         std::ofstream out(output_file, std::ios::app);
         if (!exists)
-            out << "procesos,tiempo,costo\n";  // encabezado solo si no existe
+            out << "procesos,tiempo,costo\n";  // encabezado solo si no existe*/
 
-        out << size << "," << local_time << "," << best_cost << "\n";
-        out.close();
+        // std::pair<int, double> data = std::make_pair(size, local_time);
+        std::string input_file = argv[1];
+        std::string filename = input_file.substr(input_file.find_last_of("/\\") + 1);
+        writeToCSV("output.csv", size, local_time, best_cost, filename);
+
+        /*std::ofstream extra(output_file, std::ios::app);
+        extra << size << "," << local_time << "," << best_cost << "\n";
+        out.close();*/
     }
 
     MPI_Finalize();
