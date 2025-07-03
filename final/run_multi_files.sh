@@ -19,7 +19,7 @@ for input_file in "$input_dir"/*.txt; do
 
     for n in "${procs[@]}"; do
         echo "▶ Ejecutando con $n procesos en $filename..."
-        result=$(mpiexec -n "$n" ./tsp_mpi "$input_file")
+        result=$(mpiexec -n "$n" ./tsp_mpi "$input_file" "$output_file")
 
         # Leer valores generados en CSV interno
         # Asegúrate de que el programa aún escribe en output.csv temporal

@@ -9,3 +9,7 @@
 ```
 ~ mpiexec -n 4 ./tsp_mpi test/5nodos.txt
 ```
+
+```
+~ ./run_multi_files.sh
+```

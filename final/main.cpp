@@ -101,7 +101,7 @@ int main(int argc, char *argv[]) {
         // std::pair<int, double> data = std::make_pair(size, local_time);
         std::string input_file = argv[1];
         std::string filename = input_file.substr(input_file.find_last_of("/\\") + 1);
-        writeToCSV("output.csv", size, local_time, best_cost, filename);
+        writeToCSV(argv[2], size, local_time, best_cost, filename);
 
         /*std::ofstream extra(output_file, std::ios::app);
         extra << size << "," << local_time << "," << best_cost << "\n";
