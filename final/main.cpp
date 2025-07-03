@@ -2,8 +2,15 @@
 #include <vector>
 #include <iostream>
 #include <chrono>
+#include <sys/stat.h>
+
 #include "reader.h"
 #include "tsp_mpi.h"
+
+bool file_exists(const std::string& name) {
+    struct stat buffer;
+    return (stat(name.c_str(), &buffer) == 0);
+}
 
 int main(int argc, char *argv[]) {
     MPI_Init(&argc, &argv);
@@ -34,6 +41,7 @@ int main(int argc, char *argv[]) {
             children_indices.push_back(j);
     }
 
+    double start_time = MPI_Wtime();
     double local_cost = INF;
     std::vector<int> local_path;
 
@@ -44,6 +52,9 @@ int main(int argc, char *argv[]) {
             local_path = solution.second;
         }
     }
+
+    double end_time = MPI_Wtime();
+    double local_time = end_time - start_time;
 
     // Cada proceso envía su costo
     double all_costs[size];
@@ -78,6 +89,17 @@ int main(int argc, char *argv[]) {
             if (i < all_path_lens[best_idx] - 1) std::cout << " -> ";
         }
         std::cout << "\n💰 Costo total: " << best_cost << "\n";
+
+        // Ahora guarda CSV
+        std::string output_file = "output.csv";
+        bool exists = file_exists(output_file);
+
+        std::ofstream out(output_file, std::ios::app);
+        if (!exists)
+            out << "procesos,tiempo,costo\n";  // encabezado solo si no existe
+
+        out << size << "," << local_time << "," << best_cost << "\n";
+        out.close();
     }
 
     MPI_Finalize();
