@@ -10,7 +10,7 @@ input="test/5nodos.txt"
 output="output.csv"
 
 # Escribir encabezado
-echo "procesos,tiempo,costo" > "$output"
+echo "procesos,tiempo,tiempo_com,costo" > "$output"
 
 # Ejecutar por cada cantidad de procesos
 for n in "${procs[@]}"; do

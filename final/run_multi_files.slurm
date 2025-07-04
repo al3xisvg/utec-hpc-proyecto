@@ -18,7 +18,7 @@ PROCESOS=(1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16)
 OUTPUT="output.csv"
 
 # Limpiar el archivo de salida
-echo "archivo,procesos,tiempo,costo" > $OUTPUT
+echo "archivo,procesos,tiempo,tiempo_com,costo" > $OUTPUT
 
 # Ejecutar cada combinación
 for archivo in "${ARCHIVOS[@]}"; do

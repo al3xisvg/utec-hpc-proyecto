@@ -28,10 +28,16 @@ int main(int argc, char *argv[]) {
     }
 
     // Broadcast del tamaño y matriz
+    comm_start = MPI_Wtime();
     MPI_Bcast(&N, 1, MPI_INT, 0, MPI_COMM_WORLD);
+    comm_end = MPI_Wtime();
+    comm_time += comm_end - comm_start;
     if (rank != 0) matrix.resize(N, std::vector<int>(N));
     for (int i = 0; i < N; ++i) {
+        comm_start = MPI_Wtime();
         MPI_Bcast(matrix[i].data(), N, MPI_INT, 0, MPI_COMM_WORLD);
+        comm_end = MPI_Wtime();
+        comm_time += comm_end - comm_start;
     }
 
     // División de ramas desde el nodo 0
@@ -58,12 +64,18 @@ int main(int argc, char *argv[]) {
 
     // Cada proceso envía su costo
     double all_costs[size];
+    comm_start = MPI_Wtime();
     MPI_Gather(&local_cost, 1, MPI_DOUBLE, all_costs, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+    comm_end = MPI_Wtime();
+    comm_time += comm_end - comm_start;
 
     // Cada proceso envía el tamaño de su camino
     int path_len = local_path.size();
     int all_path_lens[size];
+    comm_start = MPI_Wtime();
     MPI_Gather(&path_len, 1, MPI_INT, all_path_lens, 1, MPI_INT, 0, MPI_COMM_WORLD);
+    comm_end = MPI_Wtime();
+    comm_time += comm_end - comm_start;
 
     // Reunir rutas
     int max_path_len = N + 1;
@@ -71,7 +83,10 @@ int main(int argc, char *argv[]) {
     send_path.resize(max_path_len, -1);
     std::vector<int> all_paths(size * max_path_len, -1);
 
+    comm_start = MPI_Wtime();
     MPI_Gather(send_path.data(), max_path_len, MPI_INT, all_paths.data(), max_path_len, MPI_INT, 0, MPI_COMM_WORLD);
+    comm_end = MPI_Wtime();
+    comm_time += comm_end - comm_start;
 
     if (rank == 0) {
         int best_idx = 0;
@@ -89,6 +104,8 @@ int main(int argc, char *argv[]) {
             if (i < all_path_lens[best_idx] - 1) std::cout << " -> ";
         }
         std::cout << "\n💰 Costo total: " << best_cost << "\n";
+        std::cout << "⏱️ Tiempo de cómputo local: " << local_time << " segundos\n";
+        std::cout << "📡 Tiempo total de comunicación MPI: " << comm_time << " segundos\n";
 
         // Ahora guarda CSV
         // std::string output_file = "output.csv";
@@ -101,7 +118,7 @@ int main(int argc, char *argv[]) {
         // std::pair<int, double> data = std::make_pair(size, local_time);
         std::string input_file = argv[1];
         std::string filename = input_file.substr(input_file.find_last_of("/\\") + 1);
-        writeToCSV(argv[2], size, local_time, best_cost, filename);
+        writeToCSV(argv[2], size, local_time, comm_time, best_cost, filename);
 
         /*std::ofstream extra(output_file, std::ios::app);
         extra << size << "," << local_time << "," << best_cost << "\n";

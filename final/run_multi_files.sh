@@ -10,7 +10,7 @@ input_dir="test"
 output_file="output.csv"
 
 # Encabezado CSV
-echo "archivo,procesos,tiempo,costo" > "$output_file"
+echo "archivo,procesos,tiempo,tiempo_com,costo" > "$output_file"
 
 # Iterar sobre cada archivo .txt dentro de /test
 for input_file in "$input_dir"/*.txt; do

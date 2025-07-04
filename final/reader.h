@@ -52,14 +52,14 @@ void writeToCSV(const std::string& filename, std::pair<T, double>& data) {
     std::cout << "Data written to " << filename << std::endl;
 }*/
 
-void writeToCSV(const std::string& filename_out, int procesos, double tiempo, int costo, const std::string& filename_in) {
+void writeToCSV(const std::string& filename_out, int procesos, double tiempo, double tiempo_com, int costo, const std::string& filename_in) {
     std::ofstream file(filename_out, std::ios::app);
     if (!file.is_open()) {
         std::cerr << "❌ Error al abrir el archivo: " << filename_out << std::endl;
         return;
     }
 
-    file << filename_in << "," << procesos << "," << tiempo << "," << costo << "\n";
+    file << filename_in << "," << procesos << "," << tiempo << "," << tiempo_com << "," << costo << "\n";
     file.close();
 }
 
