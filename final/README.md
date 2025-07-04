@@ -17,7 +17,7 @@
 ### En Khipu:
 
 ```
-~  module avail
+~ module avail
 ~ module purge
 ~ module load gnu12
 ~ module load openmpi4/4.1.6
